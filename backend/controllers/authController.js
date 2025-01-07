@@ -1,4 +1,3 @@
-const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -6,7 +5,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-exports.registerUser = asyncHandler(async (req, res) => {
+exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, phoneNumber } = req.body;
 
@@ -48,7 +47,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
       .status(500)
       .json({ message: 'Error registering user', error: error.message });
   }
-});
+};
 
 exports.verifyUser = async (req, res) => {
   try {
@@ -159,5 +158,20 @@ exports.getAllUsers = async (req, res) => {
     res
       .status(500)
       .json({ message: 'Error fetching users', error: error.message });
+  }
+};
+
+exports.uploadAvatar = async (req, res) => {
+  try {
+    const user = req.user;
+
+    user.profile.profilePicture = req.file.path;
+    await user.save();
+
+    res.status(200).json({ message: 'Avatar uploaded successfully' });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'Error uploading avatar', error: error.message });
   }
 };
