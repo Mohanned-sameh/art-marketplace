@@ -99,13 +99,9 @@ exports.loginUser = async (req, res) => {
 exports.getUserProfile = async (req, res) => {
   try {
     // `req.user` is populated by auth middleware
-    const user = req.user;
+    const { name, email, phoneNumber, profile } = req.user;
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(200).json(user);
+    res.status(200).json({ name, email, phoneNumber, profile });
   } catch (error) {
     res
       .status(500)
@@ -154,7 +150,9 @@ exports.logoutUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select(
+      '-password -tokens -verificationToken -role -isVerified'
+    );
 
     res.status(200).json(users);
   } catch (error) {
