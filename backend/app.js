@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
+const authRoutes = require('./routes/authRoutes');
 const mongoose = require('./config/db');
 // Load environment variables
 require('dotenv').config();
@@ -36,10 +37,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Define a root route
+// define a root route
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Welcome to Node.js Authentication API');
 });
+
+// user Routes
+app.use('/api/v1', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

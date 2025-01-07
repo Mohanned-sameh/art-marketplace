@@ -1,9 +1,9 @@
-const mongoose = require('mongoose').Schema;
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const UserSchema = new mongoose(
+const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -24,7 +24,7 @@ const UserSchema = new mongoose(
       type: String,
       required: true,
       minlength: 6,
-      maxlength: 50,
+      maxlength: 100,
     },
     phoneNumber: {
       type: String,
@@ -58,6 +58,7 @@ const UserSchema = new mongoose(
       },
     },
     isVerified: { type: Boolean, default: false },
+    verificationToken: { type: String },
     tokens: [
       {
         token: { type: String, required: true },
